@@ -9,9 +9,7 @@
       <div class="title-box" style="background-color: grey">E</div>
     </div>
     <div style="margin-top: 100px">
-      <button @click="goTutorial" class="btn btn-secondary mb-3">
-        시작하기
-      </button>
+      <button @click="goTutorial" class="btn btn-primary mb-3">시작하기</button>
     </div>
     <div class="input-group mb-3">
       <input
@@ -20,8 +18,8 @@
         placeholder="5글자 단어를 입력해주세요"
         aria-label="wordle input"
       />
-      <button class="btn btn-secondary" type="button" id="button-addon2">
-        Button
+      <button class="btn btn-primary" type="button" id="button-addon2">
+        생성
       </button>
     </div>
   </div>
