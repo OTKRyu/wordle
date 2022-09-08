@@ -1,4 +1,4 @@
-# Wordle Battle
+# Wordle
 
 ## Project setup
 
