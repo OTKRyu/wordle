@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Result></Result>
     <div class="title-row">
       <div class="title-box" style="background-color: grey">연</div>
       <div class="title-box" style="background-color: green">습</div>
@@ -93,9 +94,13 @@
 </template>
 
 <script>
+import Result from "../components/Result.vue";
 // @ is an alias to /src
 export default {
   name: "Tutorial",
+  components: {
+    Result,
+  },
   data() {
     return {
       answer: "world",
@@ -423,6 +428,7 @@ h1 {
   font-weight: 700;
   padding: 0.5rem;
   margin: 0 2px;
+  border-radius: 15%;
   cursor: pointer;
   text-transform: uppercase;
 }

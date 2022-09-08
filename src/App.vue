@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import "./static/css/bootstrap.min.css";
+
 export default {
   name: "App",
   components: {},
