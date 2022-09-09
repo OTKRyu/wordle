@@ -1,31 +1,19 @@
 import axios from "axios";
 
-export async function checkWord(word) {
-  const result = await axios({
+export function checkWord(word) {
+  let result = axios({
     method: "GET",
     url: `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
-  })
-    .then((res) => {
-      if (res.data.title) {
-        return true;
-      } else {
-        return false;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      return false;
-    });
+  });
   return result;
 }
 
-export function func(string) {
-  var hash = 0;
-  if (string.length == 0) return hash;
-  for (x = 0; x < string.length; x++) {
-    ch = string.charCodeAt(x);
-    hash = (hash << 5) - hash + ch;
-    hash = hash & hash;
+export function hash(str) {
+  let hash = 0;
+  for (let i = 0, len = str.length; i < len; i++) {
+    let chr = str.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
   }
   return hash;
 }

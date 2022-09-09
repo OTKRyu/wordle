@@ -17,8 +17,14 @@
         class="form-control"
         placeholder="5글자 단어를 입력해주세요"
         aria-label="wordle input"
+        v-model="newWordle"
       />
-      <button class="btn btn-primary" type="button" id="button-addon2">
+      <button
+        class="btn btn-primary"
+        type="button"
+        id="button-addon2"
+        @click="createWordle"
+      >
         생성
       </button>
     </div>
@@ -27,6 +33,7 @@
 
 <script>
 // @ is an alias to /src
+import { hash, checkWord } from "../commons/utils";
 
 export default {
   name: "Home",
@@ -34,6 +41,7 @@ export default {
     return {
       key: "",
       matched: false,
+      newWordle: "",
     };
   },
   methods: {
@@ -49,6 +57,23 @@ export default {
     },
     goTutorial() {
       this.$router.push({ name: "Wordle" });
+    },
+    async createWordle() {
+      console.log(this.newWordle);
+      if (this.newWordle.length !== 5) {
+        alert("워들은 5글자 영어 단어만 등록 가능합니다.");
+        this.newWordle = "";
+      }
+      checkWord(this.newWordle)
+        .then(() => {
+          const key = hash(this.newWordle);
+          console.log(key);
+        })
+        .catch((err) => {
+          alert("존재하는 단어가 아닙니다");
+          console.log(err);
+          this.newWordle = "";
+        });
     },
   },
 };

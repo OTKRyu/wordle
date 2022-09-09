@@ -86,15 +86,13 @@
         <button class="keyboard-button" @click="onClick">m</button>
         <button class="keyboard-button" @click="onClick">Enter</button>
       </div>
-      <div class="error-row" v-show="error">
-        <strong>{{ errorMsg }}</strong>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Result from "../components/Result.vue";
+import { checkWord } from "../commons/utils";
 // @ is an alias to /src
 export default {
   name: "Wordle",
@@ -108,8 +106,6 @@ export default {
       currentGuess: [],
       inputLetterCount: 0,
       guessCount: 0,
-      errorMsg: "",
-      error: false,
       startTime: null,
       endTime: null,
     };
@@ -139,19 +135,29 @@ export default {
       this.inputLetterCount -= 1;
     },
     checkGuess() {
-      let row = document.getElementsByClassName("letter-row")[this.guessCount];
       let guessString = "";
-      let rightGuess = Array.from(this.answer);
 
       for (const val of this.currentGuess) {
         guessString += val;
       }
 
       if (guessString.length !== 5) {
-        this.error = true;
-        this.errorMsg = "Not enough letters!";
+        alert("Not enough letters!");
         return;
       }
+
+      checkWord(guessString)
+        .then(() => {
+          this.paintColor(guessString);
+        })
+        .catch(() => {
+          alert("Not a word");
+          return;
+        });
+    },
+    paintColor(guessString) {
+      let row = document.getElementsByClassName("letter-row")[this.guessCount];
+      let rightGuess = Array.from(this.answer);
 
       if (this.guessCount === 0) {
         let now = new Date();
@@ -171,9 +177,8 @@ export default {
           this.shadeKeyBoard(letter, letterColor);
         }
       }
-      console.log(this.answerCount);
 
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         if (i < 5) {
           let letterColor = "";
           let box = row.children[i];
@@ -190,42 +195,29 @@ export default {
             box.style.backgroundColor = letterColor;
             this.shadeKeyBoard(letter, letterColor);
           }
-        } else {
-          this.resetanswerCount();
-          if (guessString === this.answer) {
-            let delay = 250 * i;
-            setTimeout(() => {
-              if (guessString === this.answer) {
-                alert("You guessed right! Game over!");
-                let now = new Date();
-                this.endTime = now;
-                console.log(this.startTime);
-                console.log(this.endTime);
-                console.log(1);
-                console.log(100);
-                console.log(this.guessCount);
-                // this.$router.push({ name: "Home" });
-              }
-            }, delay);
-          } else if (this.guessCount === 5) {
-            let delay = 250 * i;
-            setTimeout(() => {
-              alert(`Sorry, answer was ${this.answer}`);
-              let now = new Date();
-              this.endTime = now;
-              console.log(this.startTime);
-              console.log(this.endTime);
-              console.log(1);
-              console.log(100);
-              console.log(this.guessCount);
-              // this.$router.push({ name: "Home" });
-            }, delay);
-          }
         }
       }
+      this.checkEnd(guessString);
       this.guessCount += 1;
       this.currentGuess = [];
       this.inputLetterCount = 0;
+    },
+    checkEnd(guessString) {
+      this.resetanswerCount();
+      console.log(guessString);
+      console.log(this.answer);
+      console.log();
+      if (guessString === this.answer) {
+        alert("You guessed right! Game over!");
+        let now = new Date();
+        this.endTime = now;
+        // this.$router.push({ name: "Home" });
+      } else if (this.guessCount === 5) {
+        alert(`Sorry, answer was ${this.answer}`);
+        let now = new Date();
+        this.endTime = now;
+        // this.$router.push({ name: "Home" });
+      }
     },
     shadeKeyBoard(letter, color) {
       for (const elem of document.getElementsByClassName("keyboard-button")) {
