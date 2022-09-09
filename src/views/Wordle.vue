@@ -101,14 +101,20 @@ export default {
   },
   data() {
     return {
-      answer: "world",
       answerCount: {},
       currentGuess: [],
       inputLetterCount: 0,
       guessCount: 0,
-      startTime: null,
-      endTime: null,
     };
+  },
+  computed: {
+    wordles() {
+      return this.$store.getters.getWordles;
+    },
+    answer() {
+      const answer = this.wordles[this.$route.params.hash].word;
+      return answer;
+    },
   },
   methods: {
     insertLetter(pressedKey) {
@@ -134,15 +140,19 @@ export default {
       this.currentGuess.pop();
       this.inputLetterCount -= 1;
     },
-    checkGuess() {
+    checkGuess(guess) {
       let guessString = "";
 
-      for (const val of this.currentGuess) {
-        guessString += val;
+      if (guess) {
+        guessString = guess;
+      } else {
+        for (const val of this.currentGuess) {
+          guessString += val;
+        }
       }
 
       if (guessString.length !== 5) {
-        alert("Not enough letters!");
+        alert("5글자 단어만 제출할 수 있습니다.");
         return;
       }
 
@@ -151,7 +161,7 @@ export default {
           this.paintColor(guessString);
         })
         .catch(() => {
-          alert("Not a word");
+          alert("단어가 아닙니다.");
           return;
         });
     },
@@ -159,21 +169,17 @@ export default {
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
       let rightGuess = Array.from(this.answer);
 
-      if (this.guessCount === 0) {
-        let now = new Date();
-        this.startTime = now;
-      }
-
       for (let i = 0; i < 5; i++) {
         let letterColor = "";
         let box = row.children[i];
-        let letter = this.currentGuess[i];
+        let letter = guessString[i];
 
-        if (this.currentGuess[i] === rightGuess[i]) {
+        if (letter === rightGuess[i]) {
           letterColor = "green";
-          this.answerCount[this.currentGuess[i]] -= 1;
+          this.answerCount[letter] -= 1;
 
           box.style.backgroundColor = letterColor;
+          box.innerText = letter;
           this.shadeKeyBoard(letter, letterColor);
         }
       }
@@ -192,6 +198,7 @@ export default {
             } else {
               letterColor = "grey";
             }
+            box.innerText = letter;
             box.style.backgroundColor = letterColor;
             this.shadeKeyBoard(letter, letterColor);
           }
@@ -204,20 +211,29 @@ export default {
     },
     checkEnd(guessString) {
       this.resetanswerCount();
-      console.log(guessString);
-      console.log(this.answer);
-      console.log();
+      this.updateState(guessString);
       if (guessString === this.answer) {
         alert("You guessed right! Game over!");
-        let now = new Date();
-        this.endTime = now;
-        // this.$router.push({ name: "Home" });
       } else if (this.guessCount === 5) {
         alert(`Sorry, answer was ${this.answer}`);
-        let now = new Date();
-        this.endTime = now;
-        // this.$router.push({ name: "Home" });
       }
+    },
+    updateState(guessString) {
+      const hash = this.$route.params.hash;
+      const newState = {
+        ...this.wordles[hash],
+      };
+      newState.trials.push(guessString);
+      if (guessString === this.answer && this.guessCount === 5) {
+        newState.end = new Date();
+      } else if (this.guessCount === 0) {
+        newState.start = new Date();
+      }
+      const newWordles = {
+        ...this.wordles,
+        [hash]: newState,
+      };
+      this.$store.dispatch("patchWordles", newWordles);
     },
     shadeKeyBoard(letter, color) {
       for (const elem of document.getElementsByClassName("keyboard-button")) {
@@ -299,6 +315,10 @@ export default {
     },
   },
   mounted() {
+    const answer = this.wordles[this.$route.params.hash].word;
+    if (!answer) {
+      this.$router.push({ name: "error_404" });
+    }
     this.resetanswerCount();
     document.addEventListener("keyup", this.onKeyup);
   },
