@@ -48,7 +48,7 @@ export default {
       }
     },
     goTutorial() {
-      this.$router.push({ name: "Tutorial" });
+      this.$router.push({ name: "Wordle" });
     },
   },
 };

@@ -97,7 +97,7 @@
 import Result from "../components/Result.vue";
 // @ is an alias to /src
 export default {
-  name: "Tutorial",
+  name: "Wordle",
   components: {
     Result,
   },

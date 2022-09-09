@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
-import Tutorial from "@/views/Tutorial.vue";
+import Wordle from "@/views/Wordle.vue";
 
 Vue.use(VueRouter);
 
@@ -12,9 +12,9 @@ const routes = [
     component: Home,
   },
   {
-    path: "/tutorial",
-    name: "Tutorial",
-    component: Tutorial,
+    path: "/wordle",
+    name: "Wordle",
+    component: Wordle,
   },
 ];
 
