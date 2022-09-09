@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
 import Wordle from "@/views/Wordle.vue";
+import error_404 from "@/views/404.vue";
 
 Vue.use(VueRouter);
 
@@ -12,9 +13,14 @@ const routes = [
     component: Home,
   },
   {
-    path: "/wordle",
+    path: "/wordle/:hash",
     name: "Wordle",
     component: Wordle,
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: error_404,
   },
 ];
 

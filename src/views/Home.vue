@@ -9,7 +9,7 @@
       <div class="title-box" style="background-color: grey">E</div>
     </div>
     <div style="margin-top: 100px">
-      <button @click="goTutorial" class="btn btn-primary mb-3">시작하기</button>
+      <button @click="goStart" class="btn btn-primary mb-3">시작하기</button>
     </div>
     <div class="input-group mb-3">
       <input
@@ -55,8 +55,8 @@ export default {
           .insertAdjacentHTML("beforeend", template);
       }
     },
-    goTutorial() {
-      this.$router.push({ name: "Wordle" });
+    goStart() {
+      this.$router.push("/Wordle/113318802");
     },
     async createWordle() {
       console.log(this.newWordle);
