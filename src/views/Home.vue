@@ -17,7 +17,7 @@
         class="form-control"
         placeholder="5글자 단어를 입력해주세요"
         aria-label="wordle input"
-        v-model="newWordle"
+        v-model="newWord"
       />
       <button
         class="btn btn-primary"
@@ -27,6 +27,15 @@
       >
         생성
       </button>
+    </div>
+    <div>
+      <ul>
+        <li v-for="(value, key) in wordles" :key="key" class="m-3">
+          <button :id="key" @click="goWordle" class="btn btn-primary">
+            {{ key }}
+          </button>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -41,8 +50,13 @@ export default {
     return {
       key: "",
       matched: false,
-      newWordle: "",
+      newWord: "",
     };
+  },
+  computed: {
+    wordles() {
+      return this.$store.getters.getWordles;
+    },
   },
   methods: {
     insertWaiting() {
@@ -58,22 +72,45 @@ export default {
     goStart() {
       this.$router.push("/Wordle/113318802");
     },
-    async createWordle() {
-      console.log(this.newWordle);
-      if (this.newWordle.length !== 5) {
+    createWordle() {
+      if (this.newWord.length !== 5) {
         alert("워들은 5글자 영어 단어만 등록 가능합니다.");
-        this.newWordle = "";
+        this.newWord = "";
       }
-      checkWord(this.newWordle)
+      checkWord(this.newWord)
         .then(() => {
-          const key = hash(this.newWordle);
-          console.log(key);
+          this.patchNewWordle();
         })
         .catch((err) => {
           alert("존재하는 단어가 아닙니다");
           console.log(err);
-          this.newWordle = "";
+          this.newWord = "";
         });
+    },
+    patchNewWordle() {
+      const key = hash(this.newWord);
+      if (!this.$store.getters.getWordles[key]) {
+        const newState = {
+          word: this.newWord,
+          trials: [],
+          start: null,
+          end: null,
+        };
+        const newWordles = {
+          ...this.$store.getters.getWordles,
+          [key]: newState,
+        };
+        this.$store.dispatch("patchWordles", newWordles);
+        alert("생성되었습니다!");
+        this.newWord = "";
+      } else {
+        alert("이미 있는 단어입니다.");
+        this.newWord = "";
+      }
+    },
+    goWordle(event) {
+      console.log(event.target.id);
+      this.$router.push(`/wordle/${event.target.id}`);
     },
   },
 };
