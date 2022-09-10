@@ -18,13 +18,29 @@
 <script>
 export default {
   name: "Result",
-  data() {
-    return {
-      playTime: 1,
-      winCount: 1,
-      winRate: 100,
-      averageTrial: 5,
-    };
+  computed: {
+    playTime() {
+      const wordleData =
+        this.$store.getters.getWordles[this.$route.params.hash];
+      const time = (wordleData.end - wordleData.start) / 1000;
+      return `${time}초`;
+    },
+    winCount() {
+      return this.$store.getters.getTotalWinCount;
+    },
+    winRate() {
+      const winRate =
+        (this.$store.getters.getTotalWinCount /
+          this.$store.getters.getTotalWordleCount) *
+        100;
+      return `${winRate}%`;
+    },
+    averageTrial() {
+      const averageTrial =
+        this.$store.getters.getTotalTrial /
+        this.$store.getters.totalWordleCount;
+      return averageTrial;
+    },
   },
   methods: {
     goHome() {
@@ -41,7 +57,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  display: none;
+  display: block;
   background-color: rgba(0, 0, 0, 0.4);
 }
 
