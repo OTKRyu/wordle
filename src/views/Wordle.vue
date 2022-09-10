@@ -2,10 +2,12 @@
   <div>
     <Result v-if="this.isEnd"></Result>
     <div class="title-row">
-      <div class="title-box" style="background-color: grey">연</div>
-      <div class="title-box" style="background-color: green">습</div>
-      <div class="title-box" style="background-color: grey">모</div>
-      <div class="title-box" style="background-color: yellow">드</div>
+      <div class="title-box" style="background-color: grey">W</div>
+      <div class="title-box" style="background-color: green">O</div>
+      <div class="title-box" style="background-color: grey">R</div>
+      <div class="title-box" style="background-color: yellow">D</div>
+      <div class="title-box" style="background-color: green">L</div>
+      <div class="title-box" style="background-color: grey">E</div>
     </div>
     <div id="game-board">
       <div class="letter-row">
@@ -189,10 +191,10 @@ export default {
         if (i < 5) {
           let letterColor = "";
           let box = row.children[i];
-          let letter = this.currentGuess[i];
+          let letter = guessString[i];
 
-          if (this.currentGuess[i] !== rightGuess[i]) {
-            let letterPosition = rightGuess.indexOf(this.currentGuess[i]);
+          if (guessString[i] !== rightGuess[i]) {
+            let letterPosition = rightGuess.indexOf(letter);
             if (letterPosition !== -1 && this.answerCount[letter] > 0) {
               letterColor = "yellow";
               this.answerCount[letter] -= 1;
@@ -245,6 +247,8 @@ export default {
           [hash]: newState,
         };
         this.$store.dispatch("patchWordles", newWordles);
+      } else {
+        this.isEnd = true;
       }
     },
     shadeKeyBoard(letter, color) {
@@ -331,8 +335,13 @@ export default {
     if (!answer) {
       this.$router.push({ name: "error_404" });
     }
-    this.resetanswerCount();
     document.addEventListener("keyup", this.onKeyup);
+    this.resetanswerCount();
+    const trials = this.wordles[this.$route.params.hash].trials;
+    for (let i = 0; i < trials.length; i++) {
+      console.log(trials);
+      this.checkGuess(trials[i]);
+    }
   },
   beforeDestroy() {
     document.removeEventListener("keyup", this.onKeyup);
