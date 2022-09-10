@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Result></Result>
+    <Result v-if="this.isEnd"></Result>
     <div class="title-row">
       <div class="title-box" style="background-color: grey">연</div>
       <div class="title-box" style="background-color: green">습</div>
@@ -105,6 +105,7 @@ export default {
       currentGuess: [],
       inputLetterCount: 0,
       guessCount: 0,
+      isEnd: false,
     };
   },
   computed: {
@@ -161,7 +162,7 @@ export default {
           this.paintColor(guessString);
         })
         .catch(() => {
-          alert("단어가 아닙니다.");
+          alert("단어를 차을 수 없습니다.");
           return;
         });
     },
@@ -213,9 +214,9 @@ export default {
       this.resetanswerCount();
       this.updateState(guessString);
       if (guessString === this.answer) {
-        alert("You guessed right! Game over!");
+        alert("정답입니다!");
       } else if (this.guessCount === 5) {
-        alert(`Sorry, answer was ${this.answer}`);
+        alert(`정답은 ${this.answer.toUpperCase()}였습니다.`);
       }
     },
     updateState(guessString) {
@@ -223,17 +224,28 @@ export default {
       const newState = {
         ...this.wordles[hash],
       };
-      newState.trials.push(guessString);
-      if (guessString === this.answer && this.guessCount === 5) {
-        newState.end = new Date();
-      } else if (this.guessCount === 0) {
-        newState.start = new Date();
+      if (!newState.end) {
+        newState.trials[this.guessCount] = guessString;
+        if (guessString === this.answer) {
+          newState.end = new Date();
+          this.isEnd = true;
+          this.$store.dispatch("patchTotalWordleCount");
+          this.$store.dispatch("patchTotalWinCount");
+          this.$store.dispatch("patchTotalTrial", this.guessCount + 1);
+        } else if (this.guessCount === 5) {
+          newState.end = new Date();
+          this.isEnd = true;
+          this.$store.dispatch("patchTotalWordleCount");
+          this.$store.dispatch("patchTotalTrial", 6);
+        } else if (this.guessCount === 0) {
+          newState.start = new Date();
+        }
+        const newWordles = {
+          ...this.wordles,
+          [hash]: newState,
+        };
+        this.$store.dispatch("patchWordles", newWordles);
       }
-      const newWordles = {
-        ...this.wordles,
-        [hash]: newState,
-      };
-      this.$store.dispatch("patchWordles", newWordles);
     },
     shadeKeyBoard(letter, color) {
       for (const elem of document.getElementsByClassName("keyboard-button")) {

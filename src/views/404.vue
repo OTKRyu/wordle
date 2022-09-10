@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>404</h1>
-    <p>찾으시는 주소는 없는 주소입니다.</p>
+    <p>단어를 찾을 수 없습니다.</p>
     <button class="btn btn-primary" @click="goHome">돌아가기</button>
   </div>
 </template>

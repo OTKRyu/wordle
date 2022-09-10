@@ -1,12 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-// const hash = {
-//   word: "",
-//   trials: [""],
-//   start: "",
-//   end: "",
-// },
 
 Vue.use(Vuex);
 
@@ -14,7 +8,6 @@ export default new Vuex.Store({
   state: {
     totalWordleCount: 0,
     totalWinCount: 0,
-    tmpTime: 0,
     totalTrial: 0,
     wordles: {
       113318802: {
@@ -24,7 +17,6 @@ export default new Vuex.Store({
         end: null,
       },
     },
-    end: false,
   },
   mutations: {
     addTotalWordleCount(state) {
@@ -32,9 +24,6 @@ export default new Vuex.Store({
     },
     addTotalWinCount(state) {
       state.totalWinCount += 1;
-    },
-    setTmpTime(state, newTime) {
-      state.tmpTime = newTime;
     },
     addTotalTrial(state, trial) {
       state.totalTrial += trial;
@@ -50,9 +39,6 @@ export default new Vuex.Store({
     patchTotalWinCount({ commit }) {
       commit("addTotalWinCount");
     },
-    patchTmpTime({ commit }, newTime) {
-      commit("setTmpTime", newTime);
-    },
     patchTotalTrial({ commit }, trial) {
       commit("addTotalTrial", trial);
     },
@@ -66,9 +52,6 @@ export default new Vuex.Store({
     },
     getTotalWinCount(state) {
       return state.totalWinCount;
-    },
-    getTmpTime(state) {
-      return state.tmpTime;
     },
     getTotalTrial(state) {
       return state.totalTrial;
