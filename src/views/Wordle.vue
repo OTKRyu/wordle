@@ -115,7 +115,7 @@ export default {
       return this.$store.getters.getWordles;
     },
     answer() {
-      const answer = this.wordles[this.$route.params.hash].word;
+      const answer = this.wordles[this.$route.params.key].word;
       return answer;
     },
   },
@@ -222,12 +222,15 @@ export default {
       }
     },
     updateState(guessString) {
-      const hash = this.$route.params.hash;
+      const key = this.$route.params.key;
       const newState = {
-        ...this.wordles[hash],
+        ...this.wordles[key],
       };
       if (!newState.end) {
         newState.trials[this.guessCount] = guessString;
+        if (this.guessCount === 0) {
+          newState.start = new Date();
+        }
         if (guessString === this.answer) {
           newState.end = new Date();
           this.isEnd = true;
@@ -239,12 +242,10 @@ export default {
           this.isEnd = true;
           this.$store.dispatch("patchTotalWordleCount");
           this.$store.dispatch("patchTotalTrial", 6);
-        } else if (this.guessCount === 0) {
-          newState.start = new Date();
         }
         const newWordles = {
           ...this.wordles,
-          [hash]: newState,
+          [key]: newState,
         };
         this.$store.dispatch("patchWordles", newWordles);
       } else {
@@ -331,13 +332,13 @@ export default {
     },
   },
   mounted() {
-    const answer = this.wordles[this.$route.params.hash].word;
+    const answer = this.wordles[this.$route.params.key].word;
     if (!answer) {
       this.$router.push({ name: "error_404" });
     }
     document.addEventListener("keyup", this.onKeyup);
     this.resetanswerCount();
-    const trials = this.wordles[this.$route.params.hash].trials;
+    const trials = this.wordles[this.$route.params.key].trials;
     for (let i = 0; i < trials.length; i++) {
       console.log(trials);
       this.checkGuess(trials[i]);

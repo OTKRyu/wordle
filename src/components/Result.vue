@@ -28,8 +28,7 @@ export default {
   },
   computed: {
     playTime() {
-      const wordleData =
-        this.$store.getters.getWordles[this.$route.params.hash];
+      const wordleData = this.$store.getters.getWordles[this.$route.params.key];
       console.log(wordleData);
       const time =
         (Date.parse(wordleData.end) - Date.parse(wordleData.start)) / 1000;

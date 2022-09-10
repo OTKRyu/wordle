@@ -13,7 +13,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/wordle/:hash",
+    path: "/wordle/:key",
     name: "Wordle",
     component: Wordle,
   },
