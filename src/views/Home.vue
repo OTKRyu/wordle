@@ -29,11 +29,15 @@
       </button>
     </div>
     <div>
-      <ul>
-        <li v-for="(value, key) in wordles" :key="key" class="m-3">
-          <button :id="key" @click="goWordle" class="btn btn-primary">
-            {{ key }}
-          </button>
+      <ul class="list-group">
+        <li
+          v-for="(value, key) in wordles"
+          :key="key"
+          class="list-group-item"
+          :id="key"
+          @click="goWordle"
+        >
+          {{ key }}
         </li>
       </ul>
     </div>
