@@ -124,6 +124,10 @@ export default {
       if (this.inputLetterCount === 5) {
         return;
       }
+
+      if (this.isEnd === true) {
+        return;
+      }
       pressedKey = pressedKey.toLowerCase();
 
       let row = document.getElementsByClassName("letter-row")[this.guessCount];
@@ -269,8 +273,6 @@ export default {
     },
     onClick(e) {
       let pressedKey = String(e.target.textContent);
-      this.error = false;
-      this.errorMsg = "";
       if (pressedKey === "Del" && this.inputLetterCount !== 0) {
         this.deleteLetter();
         return;
@@ -292,8 +294,6 @@ export default {
       }
     },
     onKeyup(e) {
-      this.error = false;
-      this.errorMsg = "";
       let pressedKey = String(e.key);
       if (pressedKey === "Backspace" && this.inputLetterCount !== 0) {
         this.deleteLetter();
@@ -464,10 +464,5 @@ h1 {
   border-radius: 15%;
   cursor: pointer;
   text-transform: uppercase;
-}
-
-.error-row {
-  margin: 0.5rem 0;
-  color: red;
 }
 </style>
