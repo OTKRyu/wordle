@@ -1,12 +1,10 @@
 <template>
   <div id="home">
     <div class="title-row">
-      <div class="title-box" style="background-color: yellow">W</div>
+      <div class="title-box" style="background-color: yellow">H</div>
       <div class="title-box" style="background-color: grey">O</div>
-      <div class="title-box" style="background-color: green">R</div>
-      <div class="title-box" style="background-color: yellow">D</div>
-      <div class="title-box" style="background-color: yellow">L</div>
-      <div class="title-box" style="background-color: grey">E</div>
+      <div class="title-box" style="background-color: green">M</div>
+      <div class="title-box" style="background-color: yellow">E</div>
     </div>
     <div style="margin-top: 100px">
       <button @click="goStart" class="btn btn-primary mb-3">시작하기</button>
@@ -119,7 +117,6 @@ export default {
       }
     },
     goWordle(event) {
-      console.log(event.target.id);
       this.$router.push(`/wordle/${event.target.id}`);
     },
   },
