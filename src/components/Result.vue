@@ -5,13 +5,13 @@
         <button class="btn btn-outline-danger" @click="closeModal">X</button>
       </div>
       <h1 class="mb-3">Modal</h1>
-      <p>플레이시간 : {{ playTime }}</p>
+      <p>플레이시간 : {{ playTime.toFixed(3) }}</p>
       <hr />
       <p>현재까지 승리한 횟수: {{ winCount }}</p>
       <hr />
-      <p>현재까지의 워들 승률: {{ winRate }}</p>
+      <p>현재까지의 워들 승률: {{ winRate.toFixed(3) }}</p>
       <hr />
-      <p>현재까지의 평균 시도 횟수: {{ averageTrial }}</p>
+      <p>현재까지의 평균 시도 횟수: {{ averageTrial.toFixed(3) }}</p>
       <br />
       <button class="btn-primary btn" @click="goHome">확인</button>
     </div>
