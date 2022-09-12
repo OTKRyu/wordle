@@ -86,7 +86,7 @@ export default {
           this.patchNewWordle();
         })
         .catch((err) => {
-          alert("존재하는 단어가 아닙니다");
+          alert("단어를 찾을 수 없습니다.");
           console.log(err);
           this.newWord = "";
         });

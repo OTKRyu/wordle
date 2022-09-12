@@ -164,7 +164,7 @@ export default {
           this.paintColor(guessString);
         })
         .catch(() => {
-          alert("단어를 차을 수 없습니다.");
+          alert("단어를 찾을 수 없습니다.");
           return;
         });
     },
@@ -217,8 +217,10 @@ export default {
       this.updateState(guessString);
       if (guessString === this.answer) {
         alert("정답입니다!");
+        this.isEnd = true;
       } else if (this.guessCount === 5) {
         alert(`정답은 ${this.answer.toUpperCase()}였습니다.`);
+        this.isEnd = true;
       }
     },
     updateState(guessString) {
@@ -248,8 +250,6 @@ export default {
           [key]: newState,
         };
         this.$store.dispatch("patchWordles", newWordles);
-      } else {
-        this.isEnd = true;
       }
     },
     shadeKeyBoard(letter, color) {
@@ -340,7 +340,6 @@ export default {
     this.resetanswerCount();
     const trials = this.wordles[this.$route.params.key].trials;
     for (let i = 0; i < trials.length; i++) {
-      console.log(trials);
       this.checkGuess(trials[i]);
     }
   },
