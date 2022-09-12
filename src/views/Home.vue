@@ -18,6 +18,7 @@
         placeholder="5글자 단어를 입력해주세요"
         aria-label="wordle input"
         v-model="newWord"
+        @keyup="onKeyUp"
       />
       <button
         class="btn btn-primary"
@@ -90,6 +91,11 @@ export default {
           console.log(err);
           this.newWord = "";
         });
+    },
+    onKeyUp(event) {
+      if (event.key === "Enter") {
+        this.createWordle();
+      }
     },
     patchNewWordle() {
       const key = hash(this.newWord);
